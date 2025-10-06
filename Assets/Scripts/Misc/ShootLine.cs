@@ -30,7 +30,25 @@ public class ShootLine : MonoBehaviour
         // let's first wait until we're ACTUALLY supposed to fade out
         yield return new WaitForSeconds(startFadeOutAfter);
 
-        // idk
+        // perform actual fade out
+        float timer = 0;
+
+        Color startColor = lineRenderer.startColor;
+        Color endColor = Color.clear;
+
+        while (timer < fadeDuration)
+        {
+            Color newColor = Color.Lerp(startColor, endColor, timer / fadeDuration);
+
+            lineRenderer.startColor = newColor;
+            lineRenderer.endColor = newColor;
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        // finally, delete self
+        Destroy(gameObject);
     }
 
     void Update()

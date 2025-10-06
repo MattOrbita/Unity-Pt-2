@@ -785,10 +785,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Shoot Line
       objectReference: {fileID: 0}
-    - target: {fileID: 6870285900233878339, guid: 5d5a1b8454f7c44bca75d7419acc3918, type: 3}
-      propertyPath: startFadeOutAfter
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7941345859234446187, guid: 5d5a1b8454f7c44bca75d7419acc3918, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
