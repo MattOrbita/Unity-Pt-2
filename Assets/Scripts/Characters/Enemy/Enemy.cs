@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Enemy : MonoBehaviour
 {
@@ -25,5 +26,16 @@ public class Enemy : MonoBehaviour
         moveDirection.Normalize();
 
         transform.position += Time.deltaTime * moveSpeed * moveDirection;
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        RestartLevel();
+    }
+
+    void RestartLevel()
+    {
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(currentSceneIndex);
     }
 }

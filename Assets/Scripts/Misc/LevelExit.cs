@@ -11,7 +11,7 @@ public class LevelExit : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!isOpen)
+        if (!isOpen || collision.tag != "Player")
         {
             return;
         }

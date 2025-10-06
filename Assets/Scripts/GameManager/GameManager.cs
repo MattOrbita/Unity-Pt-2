@@ -6,12 +6,14 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     [Header("General")]
-    [SerializeField] float fadeDuration;
     [SerializeField] Vector2 spawnPoint;
-    [SerializeField] LevelExit levelExit;
 
-    [Header("Enemy Settings")]
+    [Header("Timers")]
     [SerializeField] float enemyActivationDelay;
+    [SerializeField] float fadeDuration;
+
+    [Header("References")]
+    [SerializeField] LevelExit levelExit;
     [SerializeField] List<Enemy> enemies;
 
     Coroutine fadeCoroutine;
@@ -45,15 +47,26 @@ public class GameManager : MonoBehaviour
     {
         StartCoroutine(PerformFade(true));
 
+        GetNecessaryReferences();
+        TeleportPlayerToSpawn();
+
+        Invoke("ActivateEnemies", enemyActivationDelay);
+    }
+
+    void GetNecessaryReferences()
+    {
+        // get references to all enemies
         Enemy[] enemies = GameObject.FindObjectsByType<Enemy>(FindObjectsSortMode.None);
         this.enemies.AddRange(enemies);
         
+        // get reference to level exit
         levelExit = GameObject.FindAnyObjectByType<LevelExit>();
+    }
 
+    void TeleportPlayerToSpawn()
+    {
         Vector3 spawnPoint3D = new Vector3(spawnPoint.x, spawnPoint.y, 0);
         Player.Singleton.transform.position = spawnPoint3D;
-
-        Invoke("ActivateEnemies", enemyActivationDelay);
     }
 
     void ActivateEnemies()
