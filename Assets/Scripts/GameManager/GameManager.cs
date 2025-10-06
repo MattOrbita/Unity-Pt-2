@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] float fadeDuration;
     [SerializeField] Vector2 spawnPoint;
 
     Coroutine fadeCoroutine;
