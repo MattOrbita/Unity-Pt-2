@@ -1,13 +1,18 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("General")]
     [SerializeField] float fadeDuration;
     [SerializeField] Vector2 spawnPoint;
+    [SerializeField] LevelExit levelExit;
+
+    [Header("Enemy Settings")]
     [SerializeField] float enemyActivationDelay;
-    [SerializeField] Enemy[] enemies;
+    [SerializeField] List<Enemy> enemies;
 
     Coroutine fadeCoroutine;
 
@@ -40,6 +45,11 @@ public class GameManager : MonoBehaviour
     {
         StartCoroutine(PerformFade(true));
 
+        Enemy[] enemies = GameObject.FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+        this.enemies.AddRange(enemies);
+        
+        levelExit = GameObject.FindAnyObjectByType<LevelExit>();
+
         Vector3 spawnPoint3D = new Vector3(spawnPoint.x, spawnPoint.y, 0);
         Player.Singleton.transform.position = spawnPoint3D;
 
@@ -48,13 +58,40 @@ public class GameManager : MonoBehaviour
 
     void ActivateEnemies()
     {
-        // first, get a reference to ALL the enemies in the level
-        enemies = GameObject.FindObjectsByType<Enemy>(FindObjectsSortMode.None);
-
-        // then, we activate them all
+        // activate them all
         foreach (Enemy enemy in enemies)
         {
-            enemy.ActivateEnemy();
+            enemy.ActivateEnemy(true);
+        }
+    }
+
+    void Update()
+    {
+        OpenExitUponClearingEnemies();
+    }
+
+    void OpenExitUponClearingEnemies()
+    {
+        // once enemies have been cleared, we don't need to be checking this anymore
+        if (enemies.Count == 0)
+        {
+            return;
+        }
+
+        // let's get rid of any null (AKA newly-killed) enemies
+        foreach (Enemy enemy in enemies)
+        {
+            if (enemy == null)
+            {
+                enemies.Remove(enemy);
+                break;
+            }
+        }
+
+        // if all enemies have JUST been cleared, then let's open the exit
+        if (enemies.Count == 0)
+        {
+            levelExit.OpenExit(true);
         }
     }
 }

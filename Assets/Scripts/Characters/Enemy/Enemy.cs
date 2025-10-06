@@ -5,9 +5,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] float moveSpeed;
     [SerializeField] bool isActive;
 
-    public void ActivateEnemy()
+    public void ActivateEnemy(bool setActive)
     {
-        isActive = true;
+        isActive = setActive;
     }
 
     void Update()
