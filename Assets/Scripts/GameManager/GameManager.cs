@@ -6,6 +6,8 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] float fadeDuration;
     [SerializeField] Vector2 spawnPoint;
+    [SerializeField] float enemyActivationDelay;
+    [SerializeField] Enemy[] enemies;
 
     Coroutine fadeCoroutine;
 
@@ -40,5 +42,19 @@ public class GameManager : MonoBehaviour
 
         Vector3 spawnPoint3D = new Vector3(spawnPoint.x, spawnPoint.y, 0);
         Player.Singleton.transform.position = spawnPoint3D;
+
+        Invoke("ActivateEnemies", enemyActivationDelay);
+    }
+
+    void ActivateEnemies()
+    {
+        // first, get a reference to ALL the enemies in the level
+        enemies = GameObject.FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+
+        // then, we activate them all
+        foreach (Enemy enemy in enemies)
+        {
+            enemy.ActivateEnemy();
+        }
     }
 }

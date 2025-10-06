@@ -44,3 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26a679c6e93454dcb85e67fcf457efe9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fadeDuration: 0
+  spawnPoint: {x: 0, y: 0}
+  enemyActivationDelay: 2
+  enemies: []
