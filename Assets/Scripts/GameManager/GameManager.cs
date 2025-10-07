@@ -18,8 +18,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] LevelExit levelExit;
     [SerializeField] List<Enemy> enemies;
 
-    Coroutine fadeCoroutine;
-
     public void LoadLevel(string newLevel)
     {
         StartCoroutine(LoadLevelHelper(newLevel));
@@ -31,6 +29,13 @@ public class GameManager : MonoBehaviour
         // let's fade out completely
         inGameUI.SetBlackScreenVisible(true);
 
+        // let's wait for the fade to actually start
+        while (!inGameUI.IsFadeInProgress())
+        {
+            yield return null;
+        }
+
+        // once it starts, let's wait for it to finish
         while (inGameUI.IsFadeInProgress())
         {
             yield return null;

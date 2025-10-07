@@ -8,11 +8,11 @@ public class InGameUI : MonoBehaviour
 
     [Header("Fade In & Out")]
     [SerializeField] bool isBlackScreenVisible;
+    [SerializeField] bool wasBlackScreenVisible;
     [SerializeField] float fadeDuration;
     [SerializeField] Image blackScreen;
 
     // for fading in & out
-    bool wasBlackScreenVisible;
     Coroutine fadeCoroutine;
 
     public void SetBlackScreenVisible(bool val)
