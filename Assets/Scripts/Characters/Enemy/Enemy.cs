@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] float moveSpeed;
 
     [Header("Waypoints")]
+    [SerializeField] float targetProximity;
     [SerializeField] int targetWaypointIndex = 0;
     [SerializeField] List<Transform> waypoints;
 
@@ -45,25 +46,22 @@ public class Enemy : MonoBehaviour
 
         // go towards current target waypoint
         Transform targetWaypoint = waypoints[targetWaypointIndex];
+
         Vector3 moveDirection = targetWaypoint.position - transform.position;
-
-        Vector3 fromVector = Vector3.right;
-        int oldAngle = (int) Vector3.Angle(fromVector, moveDirection);
-
         moveDirection.Normalize();
-        // Mathf.RoundToInt();
-
-        
-        // float oldAngle = Vector3.Angle(fromVector, moveDirection);
 
         transform.position += Time.deltaTime * moveSpeed * moveDirection;
 
-        // once the angle of the vector from enemy to waypoint changes, that means the enemy has PASSED
-        // their waypoint, meaning it's time to switch to the next waypoint!
-        float newAngle = Vector3.Angle(fromVector, targetWaypoint.position - transform.position);
+        // once the enemy reaches the current waypoint, we move on to the NEXT waypoint
+        if (Vector3.Distance(transform.position, targetWaypoint.position) < targetProximity)
+        {
+            targetWaypointIndex++;
 
-        bool isAtWaypoint = Vector3.Distance(transform.position, targetWaypoint.position) < Mathf.Epsilon;
-        // bool hasPassedWaypoint = ;
+            if (targetWaypointIndex >= waypoints.Count)
+            {
+                targetWaypointIndex = 0;
+            }
+        }
     }
 
     void FollowPlayer()

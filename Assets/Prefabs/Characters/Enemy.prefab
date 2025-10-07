@@ -134,7 +134,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
+  targetProximity: 0.25
+  targetWaypointIndex: 0
+  waypoints: []
   isActive: 0
+  isPatrolling: 0
 --- !u!61 &3539839158927020943
 BoxCollider2D:
   m_ObjectHideFlags: 0
