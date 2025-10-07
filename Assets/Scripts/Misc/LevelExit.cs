@@ -3,6 +3,7 @@ using UnityEngine;
 public class LevelExit : MonoBehaviour
 {
     [SerializeField] bool isOpen;
+    [SerializeField] string nextLevelName;
 
     public void OpenExit(bool setOpen)
     {
@@ -15,7 +16,7 @@ public class LevelExit : MonoBehaviour
         {
             return;
         }
-        
-        Debug.Log("2d");
+
+        GameManager.Singleton.LoadLevel(nextLevelName);
     }
 }

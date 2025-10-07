@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Singleton;
+
     [Header("General")]
     [SerializeField] Vector2 spawnPoint;
 
@@ -24,10 +26,12 @@ public class GameManager : MonoBehaviour
     }
     IEnumerator LoadLevelHelper(string newLevel)
     {
-        fadeCoroutine = StartCoroutine(PerformFade(false));
+        InGameUI inGameUI = InGameUI.Singleton;
 
-        // we just wait until the fade out finishes
-        while (fadeCoroutine != null)
+        // let's fade out completely
+        inGameUI.SetBlackScreenVisible(true);
+
+        while (inGameUI.IsFadeInProgress())
         {
             yield return null;
         }
@@ -36,16 +40,14 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(newLevel);
     }
 
-    IEnumerator PerformFade(bool fadeIn)
+    void Awake()
     {
-        yield return null;
-
-        fadeCoroutine = null;
+        Singleton = this;
     }
 
     void Start()
     {
-        StartCoroutine(PerformFade(true));
+        InGameUI.Singleton.SetBlackScreenVisible(false);
 
         GetNecessaryReferences();
         TeleportPlayerToSpawn();

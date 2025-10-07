@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class InGameUI : MonoBehaviour
 {
+    public static InGameUI Singleton;
+
     [Header("Fade In & Out")]
     [SerializeField] bool isBlackScreenVisible;
     [SerializeField] float fadeDuration;
@@ -12,6 +14,21 @@ public class InGameUI : MonoBehaviour
     // for fading in & out
     bool wasBlackScreenVisible;
     Coroutine fadeCoroutine;
+
+    public void SetBlackScreenVisible(bool val)
+    {
+        isBlackScreenVisible = val;
+    }
+
+    public bool IsFadeInProgress()
+    {
+        return fadeCoroutine != null;
+    }
+
+    void Awake()
+    {
+        Singleton = this;
+    }
 
     void Update()
     {
