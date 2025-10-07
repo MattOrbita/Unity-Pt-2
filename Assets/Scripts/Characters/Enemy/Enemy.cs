@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,11 +7,15 @@ public class Enemy : MonoBehaviour
 {
     [Header("General")]
     [SerializeField] float moveSpeed;
+    [SerializeField] Animator animator;
 
     [Header("Waypoints")]
     [SerializeField] float targetProximity;
+    [SerializeField] float pauseDuration;
     [SerializeField] int targetWaypointIndex = 0;
     [SerializeField] List<Transform> waypoints;
+
+    Coroutine pauseCoroutine;
 
     [Header("States")]
     [SerializeField] bool isActive;
@@ -19,6 +24,12 @@ public class Enemy : MonoBehaviour
     public void ActivateEnemy(bool setActive)
     {
         isActive = setActive;
+    }
+
+    void Start()
+    {
+        // start enemy off in idle animation
+        animator.SetBool("isWalking", false);
     }
 
     void Update()
@@ -44,33 +55,55 @@ public class Enemy : MonoBehaviour
             return;
         }
 
-        // go towards current target waypoint
-        Transform targetWaypoint = waypoints[targetWaypointIndex];
-
-        Vector3 moveDirection = targetWaypoint.position - transform.position;
-        moveDirection.Normalize();
-
-        transform.position += Time.deltaTime * moveSpeed * moveDirection;
-
-        // once the enemy reaches the current waypoint, we move on to the NEXT waypoint
-        if (Vector3.Distance(transform.position, targetWaypoint.position) < targetProximity)
+        // go towards current target waypoint, unless we're pausing
+        if (pauseCoroutine == null)
         {
-            targetWaypointIndex++;
+            Transform targetWaypoint = waypoints[targetWaypointIndex];
+            MoveToTarget(targetWaypoint.position);
 
-            if (targetWaypointIndex >= waypoints.Count)
+            // once the enemy reaches the current waypoint, we pause, then move on to the next waypoint
+            if (Vector3.Distance(transform.position, targetWaypoint.position) < targetProximity)
             {
-                targetWaypointIndex = 0;
+                targetWaypointIndex++;
+
+                if (targetWaypointIndex >= waypoints.Count)
+                {
+                    targetWaypointIndex = 0;
+                }
+
+                pauseCoroutine = StartCoroutine(DoPatrolPause());
             }
         }
+    }
+
+    IEnumerator DoPatrolPause()
+    {
+        animator.SetBool("isWalking", false);
+
+        yield return new WaitForSeconds(pauseDuration);
+
+        pauseCoroutine = null;
+    }
+
+    void MoveToTarget(Vector3 target)
+    {
+        // activate walking animation
+        animator.SetBool("isWalking", true);
+
+        // face the target
+        Vector3 moveDirection = target - transform.position;
+        moveDirection.Normalize();
+
+        transform.up = -moveDirection;
+
+        // finally, MOVE towards target!
+        transform.position += Time.deltaTime * moveSpeed * moveDirection;
     }
 
     void FollowPlayer()
     {
         Vector3 playerPosition = Player.Singleton.transform.position;
-        Vector3 moveDirection = playerPosition - transform.position;
-        moveDirection.Normalize();
-
-        transform.position += Time.deltaTime * moveSpeed * moveDirection;
+        MoveToTarget(playerPosition);
     }
 
     void OnTriggerEnter2D(Collider2D collision)
