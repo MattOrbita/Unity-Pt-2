@@ -5,7 +5,10 @@ public class Player : MonoBehaviour
 {
     public static Player Singleton;
 
+    [Header("General")]
     [SerializeField] float moveSpeed;
+
+    [Header("Shoot Settings")]
     [SerializeField] float shootDistance;
     [SerializeField] bool isShootHeldDown;
     [SerializeField] GameObject shootLinePrefab;
@@ -58,9 +61,9 @@ public class Player : MonoBehaviour
                 return;
             }
 
+            // otherwise, let's shoot!
             isShootHeldDown = true;
 
-            // otherwise, let's shoot!
             RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, shootDistance);
 
             // create a shoot line!
@@ -79,6 +82,12 @@ public class Player : MonoBehaviour
 
             GameObject shootLine = Instantiate(shootLinePrefab);
             shootLine.GetComponent<ShootLine>().SetStartAndEnd(transform.position, endpoint);
+
+            // lastly, if we hit something, and that something is an enemy, then let's actually KILL the enemy!
+            if (hit.distance > Mathf.Epsilon && hit.collider.GetComponent<Enemy>() != null)
+            {
+                Destroy(hit.collider.gameObject);
+            }
         }
 
         // if shoot is not being pressed, then we unset isShootHeldDown, allowing player to shoot again!

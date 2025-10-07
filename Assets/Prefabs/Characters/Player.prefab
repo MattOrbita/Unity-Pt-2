@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9060606852685259844}
   - component: {fileID: 2237553011231669664}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Player Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 6854625281791553337}
   - component: {fileID: 6866922237767132604}
   - component: {fileID: 4333517398979354091}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -212,7 +212,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3355634258008553033}
   - component: {fileID: 8112929365976631748}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Camera Tracker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
