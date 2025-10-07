@@ -27,6 +27,8 @@ public class Player : MonoBehaviour
     void Update()
     {
         Move();
+        FaceMouseCursor();
+
         Shoot();
     }
 
@@ -36,6 +38,12 @@ public class Player : MonoBehaviour
         Vector3 moveDirection = new Vector3(moveInput.x, moveInput.y, 0);
 
         transform.position += moveSpeed * Time.deltaTime * moveDirection;
+    }
+
+    void FaceMouseCursor()
+    {
+        Vector3 centerToMouse = Input.mousePosition - new Vector3(Screen.width / 2, Screen.height / 2, 0);
+        transform.up = centerToMouse;
     }
 
     void Shoot()
